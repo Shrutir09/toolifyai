@@ -21,12 +21,24 @@ const Categories = () => {
   const loadTools = async () => {
     let query = supabase.from('tools').select('*');
 
-    if (selectedCategory !== "all") {
+    // If search query matches a category name, filter by that category
+    const categoryNames = [
+      "AI Chatbot", "AI Search", "AI Presentation Tools", "AI App Builders", "Communication",
+      "Education", "Coding", "Design", "Content", "Productivity", "Marketing"
+    ];
+    const matchingCategory = categoryNames.find(cat => 
+      cat.toLowerCase().includes(searchQuery.toLowerCase()) || 
+      searchQuery.toLowerCase().includes(cat.toLowerCase())
+    );
+
+    if (matchingCategory && selectedCategory === "all") {
+      query = query.eq('category', matchingCategory);
+    } else if (selectedCategory !== "all") {
       query = query.eq('category', selectedCategory);
     }
 
-    if (searchQuery) {
-      query = query.or(`name.ilike.%${searchQuery}%,description.ilike.%${searchQuery}%`);
+    if (searchQuery && !matchingCategory) {
+      query = query.or(`name.ilike.%${searchQuery}%,description.ilike.%${searchQuery}%,category.ilike.%${searchQuery}%`);
     }
 
     if (pricingFilter !== "all") {

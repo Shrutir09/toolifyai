@@ -84,7 +84,7 @@ const ToolCard = ({
         group flex flex-col overflow-hidden
         rounded-xl border bg-card
         transition-all duration-300
-        hover:-translate-y-1 hover:shadow-xl
+        hover:-translate-y-1 hover:shadow-xl hover:border-primary/50
       "
     >
       {/* IMAGE */}
